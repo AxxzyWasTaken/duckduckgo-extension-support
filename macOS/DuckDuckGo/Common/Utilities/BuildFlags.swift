@@ -18,6 +18,9 @@
 
 enum BuildFlags {
 
+    /// Fork builds never talk to DuckDuckGo's updater, ATB, pixel, crash or wide-event endpoints.
+    static let isExtensionFork = true
+
     static var isProductionBuild: Bool {
         let buildType = StandardApplicationBuildType()
         if buildType.isDebugBuild || buildType.isReviewBuild || buildType.isAlphaBuild {

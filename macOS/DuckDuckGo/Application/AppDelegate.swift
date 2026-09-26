@@ -698,7 +698,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         )
 
         wideEvent = WideEvent(
-            useMockRequests: buildType.isDebugBuild || buildType.isReviewBuild || buildType.isAlphaBuild,
+            useMockRequests: BuildFlags.isExtensionFork || buildType.isDebugBuild || buildType.isReviewBuild || buildType.isAlphaBuild,
             featureFlagProvider: WideEventFeatureFlagAdapter(featureFlagger: featureFlagger)
         )
 
@@ -1477,7 +1477,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             // MARK: perform first time launch logic here
         }
 
-        let statisticsLoader = AppVersion.runType.requiresEnvironment ? StatisticsLoader.shared : nil
+        let statisticsLoader = AppVersion.runType.requiresEnvironment && !BuildFlags.isExtensionFork ? StatisticsLoader.shared : nil
         statisticsLoader?.load()
 
         startupSync()
@@ -1542,7 +1542,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
         applyPreferredTheme()
 
-        if case .normal = AppVersion.runType {
+        if case .normal = AppVersion.runType, !BuildFlags.isExtensionFork {
             Task {
                 await crashReporting.start()
             }
@@ -1778,7 +1778,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     @MainActor
     private func initializeUpdateController() {
-        guard AppVersion.runType.allowsUpdates else { return }
+        // Fork: DuckDuckGo's updater would replace this app with stock DuckDuckGo.
+        guard AppVersion.runType.allowsUpdates, !BuildFlags.isExtensionFork else { return }
 
         let buildType = StandardApplicationBuildType()
         let notificationPresenter = UpdateNotificationPromoBridge()
@@ -2237,7 +2238,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     // MARK: - PixelKit
 
     static func configurePixelKit(isInternalUser: Bool) {
-        Self.setUpPixelKit(dryRun: PixelKitConfig.isDryRun(isProductionBuild: BuildFlags.isProductionBuild),
+        Self.setUpPixelKit(dryRun: BuildFlags.isExtensionFork || PixelKitConfig.isDryRun(isProductionBuild: BuildFlags.isProductionBuild),
                            isInternalUser: isInternalUser)
     }
 

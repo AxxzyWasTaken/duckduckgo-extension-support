@@ -60,7 +60,7 @@ extension WinbackOfferStore {
 public struct WinbackOfferStore: WinbackOfferStoring {
     private let keychainService: KeychainService
     private let keyValueStore: ThrowingKeyValueStoring
-    private let serviceName = "com.duckduckgo.winback-offer"
+    private let serviceName = "\(Bundle.main.bundleIdentifier ?? "com.duckduckgo").winback-offer"
 
     public init(keychainService: KeychainService = DefaultKeychainService(),
                 keyValueStore: ThrowingKeyValueStoring) {

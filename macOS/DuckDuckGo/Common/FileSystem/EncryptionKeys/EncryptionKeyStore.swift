@@ -50,7 +50,7 @@ final class EncryptionKeyStore: EncryptionKeyStoring {
 
     enum Constants {
         static let encryptionKeyAccountAppStore = "com.duckduckgo.mobile.ios"
-        static let encryptionKeyAccountDMG = "com.duckduckgo.macos.browser"
+        static let encryptionKeyAccountDMG = Bundle.main.bundleIdentifier ?? "com.duckduckgo.macos.browser"
         static let encryptionKeyService = "DuckDuckGo Privacy Browser Data Encryption Key"
 
         static let encryptionKeyServiceBase64 = "DuckDuckGo Privacy Browser Encryption Key v2"

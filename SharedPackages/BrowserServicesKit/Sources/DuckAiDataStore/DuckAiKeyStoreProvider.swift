@@ -23,7 +23,7 @@ import SecureStorage
 /// Manages a single SQLCipher encryption key for the DuckAi native data store.
 public final class DuckAiKeyStoreProvider {
 
-    private static let keychainServiceName = "DuckDuckGo DuckAi Storage"
+    private static let keychainServiceName = "\(Bundle.main.bundleIdentifier ?? "com.duckduckgo") DuckAi Storage"
     private static let keychainAccount = "DuckAiNativeDataStore-EncryptionKey"
 
     private let keychainService: KeychainService
