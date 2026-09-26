@@ -1,0 +1,15 @@
+DuckDuckGo with extensions (unofficial)
+Copyright 2026 AxxzyWasTaken
+
+This project modifies DuckDuckGo for Mac
+(https://github.com/duckduckgo/apple-browsers),
+Copyright (c) Duck Duck Go, Inc., licensed under the Apache License 2.0.
+
+The modifications are the commits on this repository's main branch after
+the upstream release tag 1.209.0-816+macos. They change the app's bundle identifiers
+and keychain names, disable telemetry and the updater, enable WebKit web
+extensions, and add UI for installing and managing extensions. New source
+files added by the fork carry their own copyright headers.
+
+"DuckDuckGo" is a trademark of Duck Duck Go, Inc. This project is not
+affiliated with or endorsed by Duck Duck Go, Inc.

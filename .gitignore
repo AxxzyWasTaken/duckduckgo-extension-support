@@ -105,3 +105,6 @@ privacy-configuration/
 **/__Snapshots__/
 !macOS/UnitTests/URLDragPreviewProvider/__Snapshots__/
 !macOS/UnitTests/URLDragPreviewProvider/__Snapshots__/**
+
+# Fork: fork/build.sh output
+/build/

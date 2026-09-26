@@ -1,0 +1,35 @@
+// Fork identity. scripts/build.sh copies this to macOS/LocalOverrides.xcconfig,
+// the hook upstream's DuckDuckGo.xcconfig already includes last.
+// Every bundle ID, app group and keychain group differs from stock DuckDuckGo,
+// so the two apps never share preferences, containers or keychain items.
+
+FORK_BUNDLE_ID = io.github.axxzywastaken.ddgext
+FORK_TEAM = FORK
+
+DEVELOPMENT_TEAM = $(FORK_TEAM)
+
+MAIN_BUNDLE_IDENTIFIER_PREFIX = $(FORK_BUNDLE_ID)
+MAIN_BUNDLE_IDENTIFIER[sdk=*] = $(FORK_BUNDLE_ID)
+
+NETP_BASE_APP_GROUP = $(FORK_TEAM).$(FORK_BUNDLE_ID).network-protection
+DBP_BASE_APP_GROUP = $(FORK_TEAM).$(FORK_BUNDLE_ID).dbp
+IPC_APP_GROUP_BASE = $(FORK_TEAM).$(FORK_BUNDLE_ID).ipc
+AGENT_BUNDLE_ID_BASE[sdk=*] = $(FORK_BUNDLE_ID).vpn
+DBP_BACKGROUND_AGENT_BUNDLE_ID_BASE[sdk=*] = $(FORK_BUNDLE_ID).dbp-agent
+DISTRIBUTED_NOTIFICATIONS_PREFIX_BASE = $(FORK_BUNDLE_ID).vpn
+
+// The VPN system extension target doesn't read LocalOverrides, so it keeps its
+// upstream name; point the VPN app's embed step at that name. It needs
+// DuckDuckGo's team ID to ever activate, and build.sh strips it from the
+// final app anyway.
+SYSEX_BUNDLE_ID_BASE[sdk=*] = com.duckduckgo.macos.vpn.network-extension
+SYSEX_BUNDLE_ID_BASE[config=Release][sdk=*] = com.duckduckgo.macos.vpn.network-extension
+
+// No DuckDuckGo update feed.
+SPARKLE_FEED_URL =
+SPARKLE_PUBLIC_EDKEY[config=Release] =
+
+// Signing is done afterwards by scripts/build.sh (ad-hoc).
+CODE_SIGN_IDENTITY[sdk=macosx*] =
+CODE_SIGNING_ALLOWED = NO
+CODE_SIGNING_REQUIRED = NO

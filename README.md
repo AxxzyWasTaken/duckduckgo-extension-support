@@ -1,62 +1,86 @@
-# DuckDuckGo Apple Browsers
+# DuckDuckGo with extensions (unofficial)
 
-This repo contains the source code for the DuckDuckGo iOS and macOS browsers, and the libraries that are shared between them to provide cross-platform features.
+A patched build of [DuckDuckGo for Mac](https://github.com/duckduckgo/apple-browsers) that lets you install Chrome/WebExtensions, and that runs alongside the regular DuckDuckGo app without touching its data.
 
-## Building
+DuckDuckGo already ships WebKit's extension engine inside the browser, but it's switched off behind a remote flag and has no UI for installing your own extensions. This fork turns it on and adds the missing pieces.
 
-### Submodules
+> Not affiliated with or endorsed by Duck Duck Go, Inc. Use at your own risk.
 
-We use submodules, so you will need to bring them into the project in order to build and run it:
+## Why this exists
 
-Run `git submodule update --init --recursive`
+DuckDuckGo's Mac browser has been out since 2022, and extension support has been one of the most requested features the whole time. Four years on, it still isn't there, even though the engine is already built into the app and just switched off.
 
-### External contributors: Duck Sans package
+So this fork switches it on. **The day DuckDuckGo ships extension support in the official app, I'll archive this repo.** Until then, here you go.
 
-The project depends on a private `DuckSansFont` Swift package that ships our licensed Duck Sans typeface. The repository is private, so building a fork without access will fail at SPM resolution. To build as an external contributor, remove the package before building:
+## What's different from stock DuckDuckGo
 
-1. Open `iOS/DuckDuckGo-iOS.xcodeproj` (or the workspace) in Xcode.
-2. Select the project in the Project Navigator, then open the **Package Dependencies** tab.
-3. Select **DuckSansFont** and click the **−** button to remove it. The app will fall back to the system font at runtime.
-4. Clean and rebuild the project.
+**Extensions**
+- **File → Install Extension…** takes a `.crx`, a `.zip`, or an unpacked extension folder.
+- **File → Install Extension from Link…** takes a Chrome Web Store URL.
+- Each extension gets a toolbar button that opens its popup. Right-click the button for options, hiding it, or removing the extension.
+- **Settings → Extensions** lets you enable, disable, configure and remove extensions.
 
-### iOS developer details
+**Runs next to the real DuckDuckGo**
+- Separate bundle ID (`io.github.axxzywastaken.ddgext`), sandbox container, and keychain items. Your bookmarks, passwords and settings in stock DuckDuckGo are never read or changed.
 
-If you're not part of the DuckDuckGo team, you should provide your Apple developer account id, app id, and group id prefix in an `ExternalDeveloper.xcconfig` file. To do that:
+**No phoning home**
+- Usage pixels, wide events, ATB install statistics and crash report uploads are all off.
+- The Sparkle updater is off. Otherwise it would "update" this app into stock DuckDuckGo.
 
-1. Run `cp iOS/Configuration/DuckDuckGoDeveloper.xcconfig iOS/Configuration/ExternalDeveloper.xcconfig`
-2. Edit `iOS/Configuration/ExternalDeveloper.xcconfig` and change the values of all fields
-3. Clean and rebuild the project
+## Requirements
 
-### macOS developer details
+- Apple Silicon Mac for the release build. Intel Macs can build from source: `build.sh` targets the machine it runs on.
+- **macOS 15.4 or later** for extensions. The browser itself still runs on 12.3+, just without extensions.
 
-If you're not part of the DuckDuckGo team, go to Signing & Capabilities to select your team and custom bundle identifier.
+## Install a release build
 
-### Dependencies
+1. Download the zip from [Releases](../../releases) and unzip it.
+2. Move **DDG Extensions Dev.app** to Applications.
+3. The app is ad-hoc signed, not notarized, so macOS will block the first launch. Either right-click → Open, or run:
+   ```sh
+   xattr -dr com.apple.quarantine "/Applications/DDG Extensions Dev.app"
+   ```
 
-We use Swift Package Manager for dependency management, which shouldn't require any additional set up.
+## Build it yourself
 
-### SwiftLint
+Needs an Xcode with the macOS 15.4 SDK or newer (built and tested with Xcode 27.0).
 
-We use [SwifLint](https://github.com/realm/SwiftLint) for enforcing Swift style and conventions, so you'll need to [install it](https://github.com/realm/SwiftLint#installation).
+```sh
+git clone https://github.com/AxxzyWasTaken/duckduckgo-extension-support
+cd duckduckgo-extension-support
+fork/build.sh
+```
 
-## Terminology
+The app lands in `build/out/`. The first build takes several minutes. `fork/package.sh` repackages and re-signs without recompiling.
 
-We have taken steps to update our terminology and remove words with problematic racial connotations, most notably the change to `main` branches, `allow lists`, and `blocklists`.
+### Moving to a newer DuckDuckGo release
 
-## Contribute
+The fork's changes are ordinary commits on top of an upstream release tag (tags look like `1.209.0-816+macos`), so updating is a rebase:
 
-Please refer to the [contributing](CONTRIBUTING.md) doc.
+```sh
+git remote add upstream https://github.com/duckduckgo/apple-browsers
+git fetch upstream tag <new tag> --no-tags
+git rebase --onto <new tag> 1.209.0-816+macos main
+```
 
-## Discuss
+## Where the changes are
 
-Contact us at https://duckduckgo.com/feedback if you have feedback, questions or want to chat. You can also use the feedback forms embedded within our mobile & desktop apps - to do so please navigate to the app's settings menu and select "Send Feedback".
+| Path | What it is |
+|---|---|
+| `macOS/DuckDuckGo/WebExtensions/Fork/` | Installer, toolbar buttons, Settings pane |
+| `fork/Fork.xcconfig` | Bundle IDs, app groups and updater settings, copied into upstream's `LocalOverrides.xcconfig` hook at build time |
+| `fork/build.sh`, `fork/package.sh` | Build, then package and ad-hoc sign |
+| [Compare with upstream](https://github.com/duckduckgo/apple-browsers/compare/1.209.0-816%2Bmacos...AxxzyWasTaken:duckduckgo-extension-support:main) | Every change, including the small hooks in upstream files |
+
+Upstream's own README is in [UPSTREAM-README.md](UPSTREAM-README.md). This fork only builds the macOS app; the iOS code is untouched.
+
+## Known limitations
+
+- **No auto-updates.** New DuckDuckGo versions need a rebuild (see above).
+- **No DuckDuckGo subscription features** (VPN, Personal Information Removal, Duck.ai paid tier). They need DuckDuckGo's own code-signing team and are removed from the build.
+- **No Sync or Passwords shared with stock DuckDuckGo.** That's deliberate: the two apps are kept fully separate.
+- **Extension coverage is whatever WebKit supports.** Manifest V3 extensions work best. Chrome-only APIs that Safari's engine lacks won't work. Tested so far: uBlock Origin Lite.
 
 ## License
 
-DuckDuckGo is distributed under the Apache 2.0 [license](https://github.com/duckduckgo/apple-browsers/blob/master/LICENSE.md).
-
-Copyright 2026 DuckDuckGo
-
-Duck Sans is a proprietary typeface created by Fontwerk and licensed to DuckDuckGo under commercial terms. Duck Sans font files are not licensed under the Apache License, Version 2.0, or covered by any open-source license applicable to this repository. You may not extract, copy, distribute, modify, or use Duck Sans font files for any purpose outside of running this software as distributed by DuckDuckGo. Redistributions of compiled builds that include Duck Sans must retain this notice. All rights in and to Duck Sans are reserved by Fontwerk (fontwerk.com).
-
-If you do not have a valid Duck Sans license, remove the DuckSansFont package and the app will fall back to the system font at runtime.
+Apache License 2.0, same as upstream. See [LICENSE.md](LICENSE.md) and [NOTICE](NOTICE).
