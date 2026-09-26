@@ -2075,7 +2075,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
         let webExtensionsPublisher = featureFlagger.updatesPublisher
             .compactMap { [weak featureFlagger] in
-                featureFlagger?.isFeatureOn(.webExtensions)
+                BuildFlags.isExtensionFork || featureFlagger?.isFeatureOn(.webExtensions) == true
             }
             .removeDuplicates()
             .eraseToAnyPublisher()
@@ -2134,7 +2134,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             }
         )
 
-        if featureFlagger.isFeatureOn(.webExtensions) {
+        if BuildFlags.isExtensionFork || featureFlagger.isFeatureOn(.webExtensions) {
             // Create manager synchronously so it's available during state restoration.
             // Tabs restored before the manager exists won't have webExtensionController attached.
             let webExtensionManager = WebExtensionManagerFactory.makeManager(

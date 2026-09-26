@@ -257,6 +257,7 @@ open class WebExtensionManager: NSObject, WebExtensionManaging, WebExtensionInst
 
         let embeddedType = installationStore.installedExtension(withUniqueIdentifier: identifier)?.embeddedType
         installationStore.remove(uniqueIdentifier: identifier)
+        Self.disabledIdentifiers.remove(identifier)
 
         if let embeddedType {
             scriptletCoordinator?.onExtensionDisabled(for: embeddedType)
@@ -445,7 +446,7 @@ open class WebExtensionManager: NSObject, WebExtensionManaging, WebExtensionInst
 
         lifecycleDelegate?.webExtensionManagerWillLoadExtensions(self)
 
-        let extensions = installationStore.installedExtensions
+        let extensions = installationStore.installedExtensions.filter { isExtensionEnabled(identifier: $0.uniqueIdentifier) }
         Logger.webExtensions.debug("🔄 Loading installed extensions (count: \(extensions.count))")
 
         let identifiers = extensions.map(\.uniqueIdentifier)
@@ -650,7 +651,14 @@ extension WebExtensionManager: WKWebExtensionControllerDelegate {
 
     public func webExtensionController(_ controller: WKWebExtensionController,
                                        openOptionsPageFor extensionContext: WKWebExtensionContext) async throws {
-        throw WebExtensionControllerDelegateError.notSupported
+        guard extensionContext.optionsPageURL != nil else { throw WebExtensionControllerDelegateError.notSupported }
+        NotificationCenter.default.post(name: Self.openOptionsPageNotification, object: extensionContext)
+    }
+
+    public func webExtensionController(_ controller: WKWebExtensionController,
+                                       didUpdate action: WKWebExtension.Action,
+                                       forExtensionContext context: WKWebExtensionContext) {
+        NotificationCenter.default.post(name: Self.actionDidUpdateNotification, object: context)
     }
 
     public func webExtensionController(_ controller: WKWebExtensionController,

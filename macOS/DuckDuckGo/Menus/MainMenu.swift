@@ -375,6 +375,10 @@ final class MainMenu: NSMenu {
                 .withImage(DesignSystemImages.Glyphs.Size12.save)
             NSMenuItem.separator()
 
+            NSMenuItem(title: "Install Extension…", action: #selector(AppDelegate.installWebExtension(_:)))
+            NSMenuItem(title: "Install Extension from Link…", action: #selector(AppDelegate.installWebExtensionFromLink(_:)))
+            NSMenuItem.separator()
+
             importBrowserDataMenuItem
             NSMenuItem(title: UserText.mainMenuFileExport) {
                 NSMenuItem(title: UserText.mainMenuFileExportPasswords, action: #selector(AppDelegate.openExportLogins))

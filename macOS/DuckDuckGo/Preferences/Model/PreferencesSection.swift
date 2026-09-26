@@ -58,6 +58,10 @@ struct PreferencesSection: Hashable, Identifiable {
                 panes.append(.aiChat)
             }
 
+            if BuildFlags.isExtensionFork {
+                panes.append(.extensions)
+            }
+
             var sortedPanes = panes.sorted { $0.displayName.lowercased() < $1.displayName.lowercased() }
 
             if includingWebsitePermissions {
@@ -168,6 +172,7 @@ enum PreferencePaneIdentifier: String, Equatable, Hashable, Identifiable, CaseIt
     case websitePermissions
     case otherPlatforms = "https://duckduckgo.com/app/devices?origin=funnel_app_macos"
     case aiChat = "aichat"
+    case extensions
     case about
 
     var id: Self {
@@ -242,6 +247,8 @@ enum PreferencePaneIdentifier: String, Equatable, Hashable, Identifiable, CaseIt
             return UserText.websitePermissions
         case .aiChat:
             return UserText.aiFeatures
+        case .extensions:
+            return "Extensions"
         case .about:
             return UserText.about
         case .otherPlatforms:
@@ -299,6 +306,8 @@ enum PreferencePaneIdentifier: String, Equatable, Hashable, Identifiable, CaseIt
             return settingsIconProvider.otherPlatformsIcon
         case .aiChat:
             return settingsIconProvider.aiGeneralIcon
+        case .extensions:
+            return NSImage(systemSymbolName: "puzzlepiece.extension", accessibilityDescription: nil) ?? settingsIconProvider.generalIcon
         }
     }
 }

@@ -43,7 +43,13 @@ let sandboxedExtraInputFiles: Set<InputFile> = Set([
  * were otherwise not included in all app/test targets, the build will stop with an error.
  */
 let extraInputFiles: [TargetName: Set<InputFile>] = [
-    "DuckDuckGo Privacy Browser": nonSandboxedExtraInputFiles,
+    "DuckDuckGo Privacy Browser": nonSandboxedExtraInputFiles.union([
+        // Fork: extension UI, only built into the direct-download app.
+        .init("AdHocAppGroupContainers.swift", .source),
+        .init("ExtensionInstaller.swift", .source),
+        .init("ExtensionToolbarController.swift", .source),
+        .init("PreferencesExtensionsView.swift", .source),
+    ]),
 
     "DuckDuckGo Privacy Browser App Store": sandboxedExtraInputFiles,
 

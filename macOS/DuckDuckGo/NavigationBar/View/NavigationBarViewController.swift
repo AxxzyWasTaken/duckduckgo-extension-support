@@ -81,6 +81,7 @@ final class NavigationBarViewController: NSViewController {
     @IBOutlet private var backgroundBaseColorView: ColorView!
 
     private var feedbackButton: MouseOverButton?
+    private var extensionToolbar: AnyObject?
     private var feedbackButtonSpacer: NSView?
     private var feedbackTipController: QuickFeedbackTipController?
     private var internalUserCancellable: AnyCancellable?
@@ -485,6 +486,7 @@ final class NavigationBarViewController: NSViewController {
         setupOverflowMenu()
         setupNetworkProtectionButton()
         setupQuickFeedbackButton()
+        setupExtensionToolbar()
 
         subscribeToThemeChanges()
         listenToPasswordManagerNotifications()
@@ -1226,6 +1228,7 @@ final class NavigationBarViewController: NSViewController {
     private func subscribeToSelectedTabViewModel() {
         guard selectedTabViewModelCancellable == nil else { return }
         selectedTabViewModelCancellable = tabCollectionViewModel.$selectedTabViewModel.receive(on: DispatchQueue.main).sink { [weak self] _ in
+            if #available(macOS 15.4, *) { (self?.extensionToolbar as? ExtensionToolbarController)?.reload() }
             self?.subscribeToNavigationActionFlags()
             self?.subscribeToCredentialsToSave()
             self?.subscribeToTabContent()
@@ -1943,6 +1946,7 @@ extension NavigationBarViewController: ThemeUpdateListening {
         setupBackgroundViewsAndColors()
         setupAsBurnerWindowIfNeeded(theme: theme)
         refreshNotificationsColor(theme: theme)
+        if #available(macOS 15.4, *) { (extensionToolbar as? ExtensionToolbarController)?.applyTheme() }
     }
 
     private func refreshNotificationsColor(theme: ThemeStyleProviding) {
@@ -2109,6 +2113,16 @@ extension NavigationBarViewController: NSMenuDelegate {
             guard let button else { return }
             tipController?.scheduleIfNeeded(anchoredTo: button)
         }
+    }
+
+    /// Fork: one button per installed web extension, left of the other toolbar buttons.
+    private func setupExtensionToolbar() {
+        guard #available(macOS 15.4, *), !isInPopUpWindow else { return }
+        let toolbar = ExtensionToolbarController(stackView: menuButtons,
+                                                 themeManager: themeManager,
+                                                 selectedTab: { [weak self] in self?.tabCollectionViewModel.selectedTabViewModel?.tab })
+        extensionToolbar = toolbar
+        toolbar.start()
     }
 
     private func removeQuickFeedbackButton() {

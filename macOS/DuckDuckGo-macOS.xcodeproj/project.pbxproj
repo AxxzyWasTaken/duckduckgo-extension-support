@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		656AF7EF3CB3F106B4926325 /* AdHocAppGroupContainers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19D29DC03F9A1ABED3B2D466 /* AdHocAppGroupContainers.swift */; };
+		99171647D68EF42EAF98FA6A /* ExtensionInstaller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 110A480EDACF57C0D6925406 /* ExtensionInstaller.swift */; };
+		43B2418E20C2308DE62939A8 /* ExtensionToolbarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46A4B403E47D0D86A655731 /* ExtensionToolbarController.swift */; };
+		B19E39257D9EAC5ECA3F7003 /* PreferencesExtensionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE67CB48F31626BAFBBE1DF6 /* PreferencesExtensionsView.swift */; };
 		00D8FF2311AEAC102CCB6061 /* BookmarksBarMenuWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E98C31C7349D34C0C8A569A /* BookmarksBarMenuWindow.swift */; };
 		021EA0802BD2A9D500772C9A /* TabsPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 021EA07F2BD2A9D500772C9A /* TabsPreferences.swift */; };
 		021EA0812BD2A9D500772C9A /* TabsPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 021EA07F2BD2A9D500772C9A /* TabsPreferences.swift */; };
@@ -5149,6 +5153,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		19D29DC03F9A1ABED3B2D466 /* AdHocAppGroupContainers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdHocAppGroupContainers.swift; sourceTree = "<group>"; };
+		110A480EDACF57C0D6925406 /* ExtensionInstaller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionInstaller.swift; sourceTree = "<group>"; };
+		B46A4B403E47D0D86A655731 /* ExtensionToolbarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionToolbarController.swift; sourceTree = "<group>"; };
+		AE67CB48F31626BAFBBE1DF6 /* PreferencesExtensionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesExtensionsView.swift; sourceTree = "<group>"; };
 		021EA07F2BD2A9D500772C9A /* TabsPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabsPreferences.swift; sourceTree = "<group>"; };
 		021EA0822BD6DF1B00772C9A /* TabsPreferencesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabsPreferencesTests.swift; sourceTree = "<group>"; };
 		0230C0A2272080090018F728 /* KeyedCodingExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyedCodingExtension.swift; sourceTree = "<group>"; };
@@ -8056,6 +8064,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		BED76D516CD033F691C931DE /* Fork */ = {
+			isa = PBXGroup;
+			children = (
+				19D29DC03F9A1ABED3B2D466 /* AdHocAppGroupContainers.swift */,
+				110A480EDACF57C0D6925406 /* ExtensionInstaller.swift */,
+				B46A4B403E47D0D86A655731 /* ExtensionToolbarController.swift */,
+				AE67CB48F31626BAFBBE1DF6 /* PreferencesExtensionsView.swift */,
+			);
+			path = Fork;
+			sourceTree = "<group>";
+		};
 		142879D824CE1139005419BB /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
@@ -8087,6 +8106,7 @@
 			children = (
 				1D94E79E2F33AA20008315A2 /* Pixels */,
 				1D6860512D36BD38006FC53E /* View */,
+				BED76D516CD033F691C931DE /* Fork */,
 				1DF78E0E2CE6197200AB898E /* Tab+WKWebExtensionTab.swift */,
 				1DF78E112CE61DB000AB898E /* MainWindowController+WKWebExtensionWindow.swift */,
 				1EC320912F23F12A00A38D09 /* WebExtensionConfigurationProvider+macOS.swift */,
@@ -19448,6 +19468,10 @@
 				EEE50C292C38249C003DD7FF /* OptionalExtension.swift in Sources */,
 				AABEE69C24A902BB0043105B /* SuggestionContainer.swift in Sources */,
 				1D68604F2D36BD28006FC53E /* WebExtensionsDebugMenu.swift in Sources */,
+				656AF7EF3CB3F106B4926325 /* AdHocAppGroupContainers.swift in Sources */,
+				99171647D68EF42EAF98FA6A /* ExtensionInstaller.swift in Sources */,
+				43B2418E20C2308DE62939A8 /* ExtensionToolbarController.swift in Sources */,
+				B19E39257D9EAC5ECA3F7003 /* PreferencesExtensionsView.swift in Sources */,
 				F1A2E1202DCB9FB00086F538 /* LogExporter.swift in Sources */,
 				B6C00ECD292F89D9009C73A6 /* FindInPageTabExtension.swift in Sources */,
 				85589E8327BBB8630038AD11 /* BurnerHomePageViewController.swift in Sources */,

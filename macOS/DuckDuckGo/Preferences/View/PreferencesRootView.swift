@@ -213,6 +213,8 @@ enum Preferences {
                     AboutView(model: model.aboutPreferences)
                 case .aiChat:
                     AIChatView(model: model.aiChatPreferences)
+                case .extensions:
+                    ExtensionsView()
                 }
             }
             .frame(maxWidth: Const.paneContentWidth, maxHeight: .infinity, alignment: .topLeading)

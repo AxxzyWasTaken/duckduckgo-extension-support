@@ -22,6 +22,7 @@ import AppKit
 struct AppMain {
 
     static func main() {
+        if BuildFlags.isExtensionFork { AdHocAppGroupContainers.install() }
         _=Application.shared
         Application.shared.run()
     }

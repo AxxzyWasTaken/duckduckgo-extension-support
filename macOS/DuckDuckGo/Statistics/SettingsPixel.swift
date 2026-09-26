@@ -128,6 +128,7 @@ enum SettingsPixel: PixelKit.Event {
             case .sync: return "settings_sync_opened"
             case .appearance: return "settings_appearance_opened"
             case .accessibility: return "settings_accessibility_opened"
+            case .extensions: return "settings_extensions_opened"
             case .dataClearing: return "settings_data_clearing_opened"
             case .duckPlayer: return "settings_duckplayer_opened"
             case .youTubeAdBlocking: return "settings_youtubeadblocking_opened"
